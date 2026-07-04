@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RSI Inventory — Sign In</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
+</head>
+<body class="auth-body">
+  <!-- SITE PASSWORD GATE -->
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#f3f4f6;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 4px 20px rgba(0,0,0,0.12);text-align:center;">
+    <svg width="42" height="42" viewBox="0 0 38 38" fill="none" style="margin-bottom:12px">
+      <rect width="38" height="38" rx="9" fill="#1a5c3a"/>
+      <path d="M19 7L31 13.5V24.5L19 31L7 24.5V13.5L19 7Z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      <path d="M19 7v24M7 13.5h24M7 24.5h24" stroke="white" stroke-width="1.4" opacity=".4"/>
+    </svg>
+    <div style="font-size:20px;font-weight:700;color:#1a5c3a;margin-bottom:6px;">RSI Inventory</div>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:24px;">Enter the site password to continue</p>
+    <input type="password" id="gateInput" placeholder="Enter password"
+      style="width:100%;padding:10px 14px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;margin-bottom:10px;box-sizing:border-box;outline:none;font-family:inherit;"
+      onkeydown="if(event.key==='Enter')checkGate()"/>
+    <div id="gateError" style="color:#ef4444;font-size:13px;margin-bottom:10px;min-height:18px;"></div>
+    <button onclick="checkGate()"
+      style="width:100%;background:#1a5c3a;color:#fff;border:none;border-radius:8px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">
+      Enter Site
+    </button>
+  </div>
+</div>
+<script>
+  var SITE_PASSWORD = 'RSI1234';
+  if (sessionStorage.getItem('rsi_gate') === 'open') {
+    document.getElementById('gate').style.display = 'none';
+  }
+  function checkGate() {
+    if (document.getElementById('gateInput').value === SITE_PASSWORD) {
+      sessionStorage.setItem('rsi_gate', 'open');
+      document.getElementById('gate').style.display = 'none';
+    } else {
+      document.getElementById('gateError').textContent = 'Incorrect password. Please try again.';
+      document.getElementById('gateInput').value = '';
+      document.getElementById('gateInput').focus();
+    }
+  }
+</script>
+<!-- END GATE -->
+
+<div class="auth-card">
+
+  <!-- Logo -->
+  <div class="auth-logo">
+    <svg width="36" height="36" viewBox="0 0 38 38" fill="none">
+      <rect width="38" height="38" rx="9" fill="#1a5c3a"/>
+      <path d="M19 7L31 13.5V24.5L19 31L7 24.5V13.5L19 7Z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      <path d="M19 7v24M7 13.5h24M7 24.5h24" stroke="white" stroke-width="1.4" opacity=".4"/>
+    </svg>
+    RSI Inventory
+  </div>
+
+  <!-- Tabs -->
+  <div class="auth-tabs">
+    <button class="tab-btn active" onclick="showTab('login')">Login</button>
+    <button class="tab-btn"        onclick="showTab('signup')">Sign Up</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginForm" class="auth-panel">
+    <h2>Welcome back</h2>
+    <p class="auth-subtitle">Sign in to manage your inventory</p>
+
+    <div class="form-group">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+
+    <div id="loginError" class="msg-error"></div>
+
+    <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Sign In</button>
+
+    <p class="auth-switch-link">
+      Don't have an account? <a href="#" onclick="showTab('signup');return false">Sign up</a>
+    </p>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="signupForm" class="auth-panel" style="display:none">
+    <h2>Create account</h2>
+    <p class="auth-subtitle">Start managing your inventory today</p>
+
+    <div class="form-group">
+      <label for="signupName">Full Name</label>
+      <input type="text" id="signupName" placeholder="John Doe" autocomplete="name"/>
+    </div>
+    <div class="form-group">
+      <label for="signupEmail">Email</label>
+      <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label for="signupPassword">Password</label>
+      <input type="password" id="signupPassword" placeholder="Min. 6 characters" autocomplete="new-password"/>
+    </div>
+
+    <div id="signupError"   class="msg-error"></div>
+    <div id="signupSuccess" class="msg-ok"></div>
+
+    <button class="btn-primary" id="signupBtn" onclick="handleSignup()">Create Account</button>
+
+    <p class="auth-switch-link">
+      Already have an account? <a href="#" onclick="showTab('login');return false">Sign in</a>
+    </p>
+  </div>
+
+</div>
+
+<!--
+  SCRIPT ORDER — IMPORTANT:
+  1. api.js   → data functions (doLogin, doSignup, etc.)
+  2. auth.js  → login/signup form logic for THIS page only
+  app-auth.js is NOT loaded here. Loading it here would cause
+  requireAuth() to fire, find no session, and redirect to index.html,
+  creating an infinite refresh loop.
+-->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>

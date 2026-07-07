@@ -285,10 +285,65 @@
   .stats-grid  { grid-template-columns: repeat(2, 1fr); }
   .panels-grid { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 600px) {
   .navbar { padding: 0 16px; gap: 12px; }
   .main   { padding: 20px 14px; }
   .nav-user-name { display: none; }
   .form-row { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* ── TABLE: horizontal scroll on mobile ── */
+  /* Wrap the table in a scrollable container */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  }
+
+  /* Set a minimum width so the table never squishes — phone must scroll */
+  .inv-table {
+    min-width: 560px;
+  }
+
+  /* Make action buttons slightly bigger and easier to tap on mobile */
+  .btn-icon {
+    padding: 9px;
+  }
+
+  /* Keep action column from wrapping */
+  .row-actions {
+    flex-wrap: nowrap;
+    gap: 2px;
+  }
+
+  /* Slightly smaller text in table cells on mobile */
+  .inv-table td {
+    font-size: 13px;
+    padding: 11px 12px;
+  }
+  .inv-table th {
+    font-size: 11px;
+    padding: 11px 12px;
+  }
+
+  /* Item name column — allow wrapping on small screens */
+  .item-name {
+    font-size: 12px;
+    word-break: break-word;
+  }
+  .item-desc {
+    font-size: 11px;
+  }
+
+  /* Add Item button — full width on very small screens */
+  .btn-add {
+    font-size: 13px;
+    padding: 9px 14px;
+  }
+
+  /* Page header stack on mobile */
+  .page-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 }
